@@ -1,0 +1,113 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.table-container {
+  height: 75%;
+  width: 50%;
+}
+
+.demo-table {
+  width: 100%;
+}
+
+.mat-column-demo-position {
+  width: 32px;
+  border-right: 1px solid currentColor;
+  padding-right: 24px;
+  text-align: center;
+}
+
+.mat-column-demo-name {
+  padding-left: 16px;
+  font-size: 20px;
+}
+.mat-row:hover {
+  background: #eee;
+  cursor: pointer;
+}
+.mat-column-demo-surname {
+  padding-left: 16px;
+  font-size: 20px;
+}
+
+.mat-column-demo-weight {
+  font-style: italic;
+}
+
+.main-container button {
+  margin: 20px;
+}
+
+.card-popup {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  top: 15%;
+  left: 15%;
+  background: #ddd;
+}
+
+.card-title-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+mat-card-title.profession {
+  margin: 15px !important;
+  border-bottom: 3px solid gray;
+}
+mat-card-title.name {
+  margin: 15px 5px 0px !important;
+  font-size: 32px;
+}
+mat-card-title.id {
+  margin: 5px 30px 5px 5px !important;
+  padding: 5px;
+  border: 3px solid gray;
+}
+mat-icon.close:hover {
+  cursor: pointer;
+}
+/* .tab-container {
+  height: 100%;
+} */
+.tab-data {
+  font-size: 34px;
+  margin: 10px;
+}
+.netto-rate,
+.normal-hours,
+.weekend-hours,
+.salary-normal-hours,
+.salary-weekend-hours,
+.addition-house,
+.addition-quater-bonus,
+.addition-sickness-benefit,
+.deduction-car,
+.deduction-training,
+.summary-total-hours,
+.summary-netto-salary,
+.summary-additions,
+.summary-deductions,
+.summary-amount-to-pay {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+
+  height: 80px;
+}
+.tab-button {
+  height: 40px;
+  margin: 15px;
+}
+.netto-rate-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+.spacer {
+  margin-left: auto;
+  font-size: 45px;
+  font-weight: bold;
+}

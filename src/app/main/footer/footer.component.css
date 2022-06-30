@@ -1,0 +1,10 @@
+.footer {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+.footer2 {
+  display: flex;
+  justify-content: space-around;
+  height: 69px;
+}

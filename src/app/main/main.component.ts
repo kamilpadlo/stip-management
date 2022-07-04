@@ -1,99 +1,28 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
-
-export interface Employee {
-  name: string;
-  surname: string;
-  id: string;
-  profession: string;
-  netRate?: number;
-  normalHours?: number;
-  weekendHours?: number;
-  salaryNormalHours?: number;
-  salaryWeekendHours?: number;
-  additionOwnHouse?: number;
-  additionQuaterBonus?: number;
-  additionSicknessBenefit?: number;
-  deductionCar?: number;
-  deductionTraining?: number;
-  totalHours?: number;
-  totalSalary?: number;
-  totalAdditions?: number;
-  totalDeductions?: number;
-  totalPay?: number;
-}
+import { Employee } from '../main/employee-model/employee.model';
 
 const Crew: Employee[] = [
-  {
-    id: ' 001',
-    name: 'Kamil',
-    surname: 'Jurak',
-    profession: 'magazynier',
-    netRate: 11,
-  },
-  {
-    id: ' 002',
-    name: 'Paweł',
-    surname: 'Maciejowski',
-    profession: 'magazynier',
-    netRate: 12,
-  },
-  {
-    id: ' 003',
-    name: 'Jan',
-    surname: 'Jacek',
-    profession: 'zaopatrzeniowiec',
-    netRate: 17,
-  },
-  {
-    id: ' 004',
-    name: 'Błażej',
-    surname: 'Sucharski',
-    profession: 'magazynier',
-    netRate: 11,
-  },
-  {
-    id: ' 005',
-    name: 'Karol',
-    surname: 'Bartkowiak',
-    profession: 'zaopatrzeniowiec',
-    netRate: 16,
-  },
-  {
-    id: ' 006',
-    name: 'Daniel',
-    surname: 'Bojanowski',
-    profession: 'magazynier',
-    netRate: 12,
-  },
-  {
-    id: ' 007',
-    name: 'Bartłomiej',
-    surname: 'Czerwik',
-    profession: 'zaopatrzeniowiec',
-    netRate: 17,
-  },
-  {
-    id: ' 008',
-    name: 'Rafał',
-    surname: 'Cichowlas',
-    profession: 'magazynier',
-    netRate: 12,
-  },
-  {
-    id: ' 009',
-    name: 'Maciej',
-    surname: 'Górowski',
-    profession: 'piekarz',
-    netRate: 14,
-  },
-  {
-    id: '010',
-    name: 'Zenon',
-    surname: 'Zambrzycki',
-    profession: 'magazynier',
-    netRate: 11,
-  },
+  new Employee('001', 'Kamil', 'Jurak', 11, 'magazynier'),
+  new Employee(' 002', 'Paweł', 'Maciejowski', 12, 'murarz'),
+  new Employee(' 003', 'Jan', 'Jacek', 17, 'piekarz'),
+  new Employee(' 004', 'Błażej', 'Sucharski', 11, 'magazynier'),
+  new Employee(' 005', 'Karol', 'Bartkowiak', 16, 'zaopatrzeniowiec'),
+  new Employee(' 006', 'Daniel', 'Bojanowski', 12, 'magazynier'),
+  new Employee(' 007', 'Bartłomiej', 'Czerwik', 17, 'piekarz'),
+  new Employee(' 008', 'Rafał', 'Cichowlas', 12, 'murarz'),
+  new Employee(' 009', 'Maciej', 'Górowski', 14, 'piekarz'),
+  new Employee('010', 'Paweł ', 'Dąbrowski', 12, 'murarz'),
+  new Employee('011', 'Kacper ', 'Piotrowski', 15, 'zaopatrzeniowiec'),
+  new Employee('012', 'Korneliusz ', 'Kołodziej', 11, 'magazynier'),
+  new Employee('013', 'Anatol ', 'Szymczak', 13, 'piekarz'),
+  new Employee('014', 'Marian ', 'Brzeziński', 11, 'murarz'),
+  new Employee('015', 'Jakub ', 'Wiśniewski', 13, 'piekarz'),
+  new Employee('016', 'Franciszek ', 'Szulc', 11, 'magazynier'),
+  new Employee('017', 'Amir ', 'Lis', 11, 'magazynier'),
+  new Employee('018', 'Ryszard ', 'Dąbrowski', 14, 'piekarz'),
+  new Employee('019', 'Błażej  ', 'Walczak', 12, 'murarz'),
+  new Employee('020', 'Jarosław  ', 'Jankowski', 11, 'piekarz'),
 ];
 
 @Component({
@@ -105,18 +34,21 @@ export class MainComponent implements OnInit {
   constructor() {}
   ngOnInit(): void {}
 
+  Crew = Crew;
+
   displayedColumns: string[] = [
     'demo-id',
     'demo-name',
     'demo-surname',
     'demo-profession',
+    'demo-details',
   ];
   dataSource = [...Crew];
 
   @ViewChild(MatTable) table: MatTable<Employee>;
 
-  addEmployeeFormActive: boolean = false;
-  popupActive: boolean = false;
+  popupActive: boolean;
+  popupAddEmployeeActive: boolean = false;
   changeNettoActive: boolean = false;
   changeNormalHoursActive: boolean = false;
   changeWeekendHoursActive: boolean = false;
@@ -126,9 +58,9 @@ export class MainComponent implements OnInit {
   carDeductionActive: boolean = false;
   trainingDeductionActive: boolean = false;
 
-  employeeName: string;
-  employeeSurname: string;
-  employeeProfession: string;
+  employeeName: string = '';
+  employeeSurname: string = '';
+  employeeProfession: string = '';
   //* netRateModel - ngModel
   netRateModel: number;
   normalHoursModel: number;
@@ -148,13 +80,13 @@ export class MainComponent implements OnInit {
   netRate: number;
   normalHours: number = 0;
   weekendHours: number = 0;
-  salaryNormalHours: number;
-  salaryWeekendHours: number;
-  additionOwnHouse: number;
-  additionQuaterBonus: number;
-  additionSicknessBenefit: number;
-  deductionCar: number;
-  deductionTraining: number;
+  salaryNormalHours: number = 0;
+  salaryWeekendHours: number = 0;
+  additionOwnHouse: number = 0;
+  additionQuaterBonus: number = 0;
+  additionSicknessBenefit: number = 0;
+  deductionCar: number = 0;
+  deductionTraining: number = 0;
   totalHours: number = 0;
   totalSalary: number = 0;
   totalAdditions: number = 0;
@@ -162,6 +94,7 @@ export class MainComponent implements OnInit {
   totalPay: number = 0;
 
   buttonConfirm = 'Confirm';
+  counter: number = 0;
 
   createNewEmployee() {
     //todo to jest ok jeśli nie ma opcji usuwania pracownika
@@ -180,29 +113,38 @@ export class MainComponent implements OnInit {
       id: newId,
       name: emplName,
       surname: emplSurame,
-      profession: this.employeeProfession,
       netRate: 15,
+      profession: this.employeeProfession,
     });
+    this.dataSource = [...Crew];
 
     return {
       id: newId,
       name: emplName,
       surname: emplSurame,
-      profession: this.employeeProfession,
       netRate: 15,
+      profession: this.employeeProfession,
     };
   }
 
   addNewEmployee() {
-    this.dataSource.push(this.createNewEmployee());
-    this.table.renderRows();
-    this.addEmployeeFormActive = false;
-    this.employeeName = '';
-    this.employeeSurname = '';
-    this.employeeProfession = '';
+    if (
+      this.employeeName === '' ||
+      this.employeeSurname === '' ||
+      this.employeeProfession === ''
+    ) {
+      alert('In order to add new employee, you have to fill all input fields.');
+    } else {
+      this.dataSource.push(this.createNewEmployee());
+      this.table.renderRows();
+      this.popupAddEmployeeActive = false;
+      this.employeeName = '';
+      this.employeeSurname = '';
+      this.employeeProfession = '';
+    }
   }
   getRowObject(row) {
-    this.dataSource = [...Crew];
+    // this.dataSource = [...Crew];
     this.popupActive = true;
     this.id = row.id;
     this.name = row.name;
@@ -230,169 +172,82 @@ export class MainComponent implements OnInit {
     this.totalDeductions = row.totalDeductions ? row.totalDeductions : 0;
     this.totalPay = row.totalPay ? row.totalPay : 0;
   }
-  //* Hours segment
-  changeNettRate() {
-    this.netRate = this.netRateModel;
-    this.currentId = this.id;
-    Crew.map((val) => {
-      if (val.id === this.currentId) val.netRate = this.netRateModel;
-    });
-    this.netRateModel = null;
-    this.changeNettoActive = false;
-  }
-  //? change normal hours + update normal hours salary
-  changeNormalHours() {
-    this.normalHours = this.normalHoursModel;
-    this.currentId = this.id;
-    this.totalHours = this.normalHours + this.weekendHours;
 
-    Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.normalHours = this.normalHoursModel;
-        val.salaryNormalHours = this.normalHours * this.netRate;
-        this.salaryNormalHours = val.salaryNormalHours;
-        val.totalHours = this.normalHours + this.weekendHours;
-        val.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-        this.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-
-    this.normalHoursModel = null;
-    this.changeNormalHoursActive = false;
+  receiveNetRateModel($event) {
+    this.netRateModel = $event;
   }
-  //? change weekend hours + update weekend hours salary
-  changeWeekendHours() {
-    this.currentId = this.id;
-    this.weekendHours = this.weekendHoursModel;
-    this.totalHours = this.normalHours + this.weekendHours;
-
-    Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.weekendHours = this.weekendHoursModel;
-        val.salaryWeekendHours = this.weekendHours * this.netRate * 1.5;
-        this.salaryWeekendHours = val.salaryWeekendHours;
-        val.totalHours = this.normalHours + this.weekendHours;
-        val.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-        this.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.weekendHoursModel = null;
-    this.changeWeekendHoursActive = false;
+  receiveNormalHoursModel($event) {
+    this.normalHoursModel = $event;
   }
-  //* Addition segment
-  bonusOwnHouse() {
-    this.currentId = this.id;
-    this.additionOwnHouse = this.additionOwnHouseModel;
-    this.totalAdditions =
-      this.additionOwnHouse +
-      this.additionQuaterBonus +
-      this.additionSicknessBenefit;
-    Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.additionOwnHouse = this.additionOwnHouseModel;
-        val.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.additionOwnHouseModel = null;
-    this.ownHouseActive = false;
+  receiveWeekendHoursModel($event) {
+    this.weekendHoursModel = $event;
+  }
+  receiveChangeBonusOwnHouseModel($event) {
+    this.additionOwnHouseModel = $event;
+  }
+  receiveChangeBonusQuaterBonusModel($event) {
+    this.additionQuaterBonusModel = $event;
+  }
+  receiveChangeBonusSicknessBenefitModel($event) {
+    this.additionSicknessBenefitModel = $event;
+  }
+  receiveDeductionForCarModel($event) {
+    this.deductionCarModel = $event;
+  }
+  receiveDeductionForTrainingModel($event) {
+    this.deductionTrainingModel = $event;
+  }
+  receivePopupActive($event) {
+    this.popupActive = $event;
   }
 
-  bonusQuaterBonus() {
-    this.currentId = this.id;
-    this.additionQuaterBonus = this.additionQuaterBonusModel;
-    this.totalAdditions =
-      this.additionOwnHouse +
-      this.additionQuaterBonus +
-      this.additionSicknessBenefit;
-    this.totalPay =
-      this.totalSalary + this.totalAdditions - this.totalDeductions;
-    Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.additionQuaterBonus = this.additionQuaterBonusModel;
-        val.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.additionQuaterBonusModel = null;
-    this.changeQuaterBonusActive = false;
+  receiveNetRate($event) {
+    this.netRate = $event;
   }
-
-  bonusSicknessBenefit() {
-    this.currentId = this.id;
-    this.additionSicknessBenefit = this.additionSicknessBenefitModel;
-    this.totalAdditions =
-      this.additionOwnHouse +
-      this.additionQuaterBonus +
-      this.additionSicknessBenefit;
-    this.totalPay =
-      this.totalSalary + this.totalAdditions - this.totalDeductions;
-    Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.additionSicknessBenefit = this.additionSicknessBenefitModel;
-        val.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.additionSicknessBenefitModel = null;
-    this.changeSicknessBenefitActive = false;
+  receiveNormalHours($event) {
+    this.normalHours = $event;
   }
-  //* Deduction segment
-
-  deductionForCar() {
-    this.currentId = this.id;
-    this.deductionCar = this.deductionCarModel;
-    this.totalDeductions = this.deductionCar + this.deductionTraining;
-    this.totalPay =
-      this.totalSalary + this.totalAdditions - this.totalDeductions;
-    Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.deductionCar = this.deductionCarModel;
-        val.totalDeductions = this.deductionCar + this.deductionTraining;
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.deductionCarModel = null;
-    this.carDeductionActive = false;
+  receiveWeekendHours($event) {
+    this.weekendHours = $event;
   }
-  deductionForTraining() {
-    this.currentId = this.id;
-    this.deductionTraining = this.deductionTrainingModel;
-    this.totalDeductions = this.deductionCar + this.deductionTraining;
-    this.totalPay =
-      this.totalSalary + this.totalAdditions - this.totalDeductions;
-    Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.deductionTraining = this.deductionTrainingModel;
-        val.totalDeductions = this.deductionCar + this.deductionTraining;
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.deductionTrainingModel = null;
-    this.trainingDeductionActive = false;
+  receiveSalaryNormalHours($event) {
+    this.salaryNormalHours = $event;
+  }
+  receiveSalaryWeekendHours($event) {
+    this.salaryWeekendHours = $event;
+  }
+  receiveAdditionOwnHouse($event) {
+    this.additionOwnHouse = $event;
+  }
+  receiveAdditionQuaterBonus($event) {
+    this.additionQuaterBonus = $event;
+  }
+  receiveAdditionSicknessBenefit($event) {
+    this.additionSicknessBenefit = $event;
+  }
+  receiveDeductionCar($event) {
+    this.deductionCar = $event;
+  }
+  receiveDeductionTraining($event) {
+    this.deductionTraining = $event;
+  }
+  receiveTotalHours($event) {
+    this.totalHours = $event;
+  }
+  receiveTotalSalary($event) {
+    this.totalSalary = $event;
+  }
+  receiveTotalAdditions($event) {
+    this.totalAdditions = $event;
+  }
+  receiveTotalDeductions($event) {
+    this.totalDeductions = $event;
+  }
+  receiveTotalPay($event) {
+    this.totalPay = $event;
   }
 }
+
+//! usuwane funkcje (dlatego, że dodane zostają nowe w osobnym componencie niejako zastępujące je)
+// coś z netRate()
+// changeNormalHours()

@@ -29,6 +29,17 @@
         <td mat-cell *matCellDef="let employee">{{ employee.profession }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="demo-details">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef>
+          <div class="view-details">
+            <button mat-raised-button color="warn">
+              View Details <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
         mat-row
@@ -39,7 +50,7 @@
   </div>
   <div class="main-container">
     <button
-      (click)="addEmployeeFormActive = !addEmployeeFormActive"
+      (click)="popupAddEmployeeActive = !popupAddEmployeeActive"
       mat-raised-button
       color="primary"
     >
@@ -47,383 +58,112 @@
     </button>
 
     <!-- //todo Make some proper validation -->
-    <div class="form" *ngIf="addEmployeeFormActive">
-      <mat-form-field appearance="fill">
-        <mat-label>Name</mat-label>
-        <input [(ngModel)]="employeeName" matInput #input />
-      </mat-form-field>
+    <mat-card *ngIf="popupAddEmployeeActive" class="card-popup-small">
+      <div class="card-title-wrapper">
+        <mat-card-title style="width: 50%">ADD NEW EMPLOYEE </mat-card-title>
+        <div class="spacer" style="width: 100%"></div>
+        <mat-icon (click)="popupAddEmployeeActive = false" class="close"
+          >close</mat-icon
+        >
+      </div>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Surame</mat-label>
-        <input [(ngModel)]="employeeSurname" matInput #input />
-      </mat-form-field>
+      <mat-card-actions>
+        <div class="form">
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input [(ngModel)]="employeeName" matInput #input />
+          </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Profession</mat-label>
-        <mat-select [(ngModel)]="employeeProfession">
-          <mat-option value="magazynier">magazynier</mat-option>
-          <mat-option value="zaopatrzeniowiec">zaopatrzeniowiec</mat-option>
-          <mat-option value="piekarz">piekarz</mat-option>
-          <mat-option value="murarz">murarz</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button
-        (click)="addNewEmployee()"
-        type="submit"
-        mat-raised-button
-        color="primary"
-      >
-        Add Employee
-      </button>
-    </div>
+          <mat-form-field appearance="fill">
+            <mat-label>Surame</mat-label>
+            <input [(ngModel)]="employeeSurname" matInput #input />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Profession</mat-label>
+            <mat-select [(ngModel)]="employeeProfession">
+              <mat-option value="magazynier">magazynier</mat-option>
+              <mat-option value="zaopatrzeniowiec">zaopatrzeniowiec</mat-option>
+              <mat-option value="piekarz">piekarz</mat-option>
+              <mat-option value="murarz">murarz</mat-option>
+              <mat-option value="no data"></mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button
+            (click)="addNewEmployee()"
+            type="submit"
+            mat-raised-button
+            color="primary"
+          >
+            Add Employee
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
   </div>
 
   <!--  Card popup  -->
 
-  <mat-card *ngIf="popupActive" class="card-popup">
-    <div class="card-title-wrapper">
-      <mat-card-title class="id">{{ id }}</mat-card-title>
-      <mat-card-title class="name">{{ surname }}</mat-card-title>
-      <mat-card-title class="name">{{ name }}</mat-card-title>
-      <mat-card-title class="profession">{{ profession }}</mat-card-title>
-      <div class="spacer" style="width: 100%"></div>
-      <mat-icon (click)="popupActive = false" class="close">close</mat-icon>
-    </div>
-    <!-- <mat-card-subtitle>Start</mat-card-subtitle> -->
-
-    <mat-card-actions class="tab-container">
-      <mat-tab-group mat-align-tabs="center">
-        <mat-tab label="Hours">
-          <div class="netto-rate">
-            <div class="netto-rate-wrapper">
-              <p class="tab-data">Netto Rate</p>
-              <button
-                class="tab-button"
-                (click)="changeNettoActive = !changeNettoActive"
-                mat-raised-button
-                color="primary"
-              >
-                Change Netto Rate
-              </button>
-              <mat-form-field
-                class="tab-form"
-                *ngIf="changeNettoActive"
-                appearance="fill"
-              >
-                <mat-label>New Netto Rate</mat-label>
-                <input
-                  [(ngModel)]="netRateModel"
-                  type="number"
-                  matInput
-                  #input
-                />
-              </mat-form-field>
-              <button
-                *ngIf="changeNettoActive"
-                (click)="changeNettRate()"
-                class="tab-button"
-                mat-raised-button
-                color="primary"
-              >
-                {{ buttonConfirm }}
-              </button>
-            </div>
-            <p class="tab-data spacer">{{ netRate }}€</p>
-          </div>
-          <hr />
-          <div class="normal-hours">
-            <p class="tab-data">Normal Hours</p>
-            <button
-              class="tab-button"
-              (click)="changeNormalHoursActive = !changeNormalHoursActive"
-              mat-raised-button
-              color="primary"
-            >
-              Add Normal Hours
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="changeNormalHoursActive"
-              appearance="fill"
-            >
-              <mat-label>Change Normal Hours</mat-label>
-              <input
-                [(ngModel)]="normalHoursModel"
-                type="number"
-                matInput
-                #input
-              />
-            </mat-form-field>
-            <button
-              *ngIf="changeNormalHoursActive"
-              (click)="changeNormalHours()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
-            <p class="tab-data spacer">{{ normalHours }}</p>
-          </div>
-
-          <hr />
-          <div class="weekend-hours">
-            <p class="tab-data">Weekend Hours</p>
-            <button
-              class="tab-button"
-              (click)="changeWeekendHoursActive = !changeWeekendHoursActive"
-              mat-raised-button
-              color="primary"
-            >
-              Add Weekend Hours
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="changeWeekendHoursActive"
-              appearance="fill"
-            >
-              <mat-label>Change Weekend Hours</mat-label>
-              <input
-                [(ngModel)]="weekendHoursModel"
-                type="number"
-                matInput
-                #input
-              />
-            </mat-form-field>
-            <button
-              *ngIf="changeWeekendHoursActive"
-              (click)="changeWeekendHours()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
-            <p class="tab-data spacer">{{ weekendHours }}</p>
-          </div>
-        </mat-tab>
-        <mat-tab label="Salary">
-          <div class="salary-normal-hours">
-            <p class="tab-data">Salary for Normal Hours:</p>
-            <p class="tab-data spacer">{{ salaryNormalHours }}€</p>
-          </div>
-          <hr />
-
-          <div class="salary-weekend-hours">
-            <p class="tab-data">Salary for Weekend Hours</p>
-            <p class="tab-data spacer">{{ salaryWeekendHours }}€</p>
-          </div>
-        </mat-tab>
-        <mat-tab label="Additions">
-          <div class="addition-house">
-            <p class="tab-data addition-house">Addition for own house</p>
-            <button
-              class="tab-button"
-              (click)="ownHouseActive = !ownHouseActive"
-              mat-raised-button
-              color="primary"
-            >
-              Add Bonus
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="ownHouseActive"
-              appearance="fill"
-            >
-              <mat-label>Bonus - own house</mat-label>
-              <input
-                [(ngModel)]="additionOwnHouseModel"
-                type="number"
-                matInput
-                #input
-              />
-            </mat-form-field>
-            <button
-              *ngIf="ownHouseActive"
-              (click)="bonusOwnHouse()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
-
-            <p class="tab-data spacer">{{ additionOwnHouse }}€</p>
-          </div>
-          <hr />
-          <div class="addition-quater-bonus">
-            <p class="tab-data">Quater bonus</p>
-            <button
-              class="tab-button"
-              (click)="changeQuaterBonusActive = !changeQuaterBonusActive"
-              mat-raised-button
-              color="primary"
-            >
-              Add Bonus
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="changeQuaterBonusActive"
-              appearance="fill"
-            >
-              <mat-label>Add Quater Bonus</mat-label>
-              <input
-                [(ngModel)]="additionQuaterBonusModel"
-                type="number"
-                matInput
-                #input
-              />
-            </mat-form-field>
-            <button
-              *ngIf="changeQuaterBonusActive"
-              (click)="bonusQuaterBonus()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
-            <p class="tab-data spacer">{{ additionQuaterBonus }}€</p>
-          </div>
-
-          <hr />
-          <div class="addition-sickness-benefit">
-            <p class="tab-data">Sickness benefit</p>
-            <button
-              class="tab-button"
-              (click)="
-                changeSicknessBenefitActive = !changeSicknessBenefitActive
-              "
-              mat-raised-button
-              color="primary"
-            >
-              Add Bonus
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="changeSicknessBenefitActive"
-              appearance="fill"
-            >
-              <mat-label>Add Sickness Benefit</mat-label>
-              <input
-                [(ngModel)]="additionSicknessBenefitModel"
-                type="number"
-                matInput
-                #input
-              />
-            </mat-form-field>
-            <button
-              *ngIf="changeSicknessBenefitActive"
-              (click)="bonusSicknessBenefit()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
-            <p class="tab-data spacer">{{ additionSicknessBenefit }}€</p>
-          </div>
-        </mat-tab>
-        <mat-tab label="Deductions">
-          <div class="deduction-car">
-            <p class="tab-data deduction-car">Deduction for company car</p>
-            <button
-              class="tab-button"
-              (click)="carDeductionActive = !carDeductionActive"
-              mat-raised-button
-              color="primary"
-            >
-              Add Deduction
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="carDeductionActive"
-              appearance="fill"
-            >
-              <mat-label>Deduction - company car</mat-label>
-              <input
-                [(ngModel)]="deductionCarModel"
-                type="number"
-                matInput
-                #input
-              />
-            </mat-form-field>
-            <button
-              *ngIf="carDeductionActive"
-              (click)="deductionForCar()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
-
-            <p class="tab-data spacer">{{ deductionCar }}€</p>
-          </div>
-          <hr />
-          <div class="deduction-training">
-            <p class="tab-data">Deduction for training</p>
-            <button
-              class="tab-button"
-              (click)="trainingDeductionActive = !trainingDeductionActive"
-              mat-raised-button
-              color="primary"
-            >
-              Add Deduction
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="trainingDeductionActive"
-              appearance="fill"
-            >
-              <mat-label>Deduction - training</mat-label>
-              <input
-                [(ngModel)]="deductionTrainingModel"
-                type="number"
-                matInput
-                #input
-              />
-            </mat-form-field>
-            <button
-              *ngIf="trainingDeductionActive"
-              (click)="deductionForTraining()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
-            <p class="tab-data spacer">{{ deductionTraining }}€</p>
-          </div>
-        </mat-tab>
-        <mat-tab label="Summary">
-          <div class="summary-total-hours">
-            <p class="tab-data">Total Hours</p>
-            <p class="tab-data spacer">{{ totalHours }}</p>
-          </div>
-          <hr />
-
-          <div class="summary-netto-salary">
-            <p class="tab-data">Total Netto Salary</p>
-            <p class="tab-data spacer">{{ totalSalary }}€</p>
-          </div>
-          <hr />
-          <div class="summary-additions">
-            <p class="tab-data">Total Additions</p>
-            <p class="tab-data spacer">{{ totalAdditions }}€</p>
-          </div>
-          <hr />
-          <div class="summary-deductions">
-            <p class="tab-data">Total Deductions</p>
-            <p class="tab-data spacer">{{ totalDeductions }}€</p>
-          </div>
-          <hr />
-          <div class="summary-amount-to-pay">
-            <p class="tab-data">Amount to Pay</p>
-            <p class="tab-data spacer">{{ totalPay }}€</p>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </mat-card-actions>
-  </mat-card>
+  <app-user-details
+    [counter]="counter"
+    [dataSource]="dataSource"
+    [Crew]="Crew"
+    [popupActive]="popupActive"
+    [changeNettoActive]="changeNettoActive"
+    [changeNormalHoursActive]="changeNormalHoursActive"
+    [changeWeekendHoursActive]="changeWeekendHoursActive"
+    [ownHouseActive]="ownHouseActive"
+    [changeQuaterBonusActive]="changeQuaterBonusActive"
+    [changeSicknessBenefitActive]="changeSicknessBenefitActive"
+    [carDeductionActive]="carDeductionActive"
+    [trainingDeductionActive]="trainingDeductionActive"
+    [id]="id"
+    [name]="name"
+    [surname]="surname"
+    [profession]="profession"
+    [netRate]="netRate"
+    [normalHours]="normalHours"
+    [weekendHours]="weekendHours"
+    [salaryNormalHours]="salaryNormalHours"
+    [salaryWeekendHours]="salaryWeekendHours"
+    [additionOwnHouse]="additionOwnHouse"
+    [additionQuaterBonus]="additionQuaterBonus"
+    [additionSicknessBenefit]="additionSicknessBenefit"
+    [deductionCar]="deductionCar"
+    [deductionTraining]="deductionTraining"
+    [totalHours]="totalHours"
+    [totalSalary]="totalSalary"
+    [totalAdditions]="totalAdditions"
+    [totalDeductions]="totalDeductions"
+    [totalPay]="totalPay"
+    [buttonConfirm]="buttonConfirm"
+    (outputNetRateModel)="receiveNetRateModel($event)"
+    (outputNormalHoursModel)="receiveNormalHoursModel($event)"
+    (outputWeekendHoursModel)="receiveWeekendHoursModel($event)"
+    (outputChangeBonusOwnHouseModel)="receiveChangeBonusOwnHouseModel($event)"
+    (outputChangeBonusQuaterBonusModel)="
+      receiveChangeBonusQuaterBonusModel($event)
+    "
+    (outputChangeBonusSicknessBenefitModel)="
+      receiveChangeBonusSicknessBenefitModel($event)
+    "
+    (outputDeductionForCarModel)="receiveDeductionForCarModel($event)"
+    (outputDeductionForTrainingModel)="receiveDeductionForTrainingModel($event)"
+    (outputPopupActive)="receivePopupActive($event)"
+    (outputNormalHours)="receiveNormalHours($event)"
+    (outputWeekendHours)="receiveWeekendHours($event)"
+    (outputSalaryNormalHours)="receiveSalaryNormalHours($event)"
+    (outputSalaryWeekendHours)="receiveSalaryWeekendHours($event)"
+    (outputAdditionOwnHouse)="receiveAdditionOwnHouse($event)"
+    (outputAdditionQuaterBonus)="receiveAdditionQuaterBonus($event)"
+    (outputAdditionSicknessBenefit)="receiveAdditionSicknessBenefit($event)"
+    (outputDeductionCar)="receiveDeductionCar($event)"
+    (outputDeductionTraining)="receiveDeductionTraining($event)"
+    (outputTotalHours)="receiveTotalHours($event)"
+    (outputTotalSalary)="receiveTotalSalary($event)"
+    (outputTotalAdditions)="receiveTotalAdditions($event)"
+    (outputTotalDeductions)="receiveTotalDeductions($event)"
+    (outputTotalPay)="receiveTotalPay($event)"
+    (outputNetRate)="receiveNetRate($event)"
+  ></app-user-details>
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
-import { Employee } from '../main/employee-model/employee.model';
+import { Employee } from './models/employee-model/employee.model';
+import { User } from './models/user-model/user.model';
 
 const Crew: Employee[] = [
   new Employee('001', 'Kamil', 'Jurak', 11, 'magazynier'),
@@ -94,7 +95,6 @@ export class MainComponent implements OnInit {
   totalPay: number = 0;
 
   buttonConfirm = 'Confirm';
-  counter: number = 0;
 
   createNewEmployee() {
     //todo to jest ok jeśli nie ma opcji usuwania pracownika
@@ -144,8 +144,9 @@ export class MainComponent implements OnInit {
     }
   }
   getRowObject(row) {
-    // this.dataSource = [...Crew];
+    this.dataSource = [...Crew];
     this.popupActive = true;
+
     this.id = row.id;
     this.name = row.name;
     this.surname = row.surname;
@@ -201,36 +202,30 @@ export class MainComponent implements OnInit {
     this.popupActive = $event;
   }
 
-  receiveNetRate($event) {
-    this.netRate = $event;
+  receiveHours($event) {
+    this.netRate = $event.netRate;
+    this.normalHours = $event.normalHours;
+    this.weekendHours = $event.weekendHours;
   }
-  receiveNormalHours($event) {
-    this.normalHours = $event;
-  }
-  receiveWeekendHours($event) {
-    this.weekendHours = $event;
-  }
+
   receiveSalaryNormalHours($event) {
     this.salaryNormalHours = $event;
   }
   receiveSalaryWeekendHours($event) {
     this.salaryWeekendHours = $event;
   }
-  receiveAdditionOwnHouse($event) {
-    this.additionOwnHouse = $event;
+
+  receiveAdditions($event) {
+    this.additionOwnHouse = $event.additionOwnHouse;
+    this.additionQuaterBonus = $event.additionQuaterBonus;
+    this.additionSicknessBenefit = $event.additionSicknessBenefit;
   }
-  receiveAdditionQuaterBonus($event) {
-    this.additionQuaterBonus = $event;
+
+  receiveDeductions($event) {
+    this.deductionCar = $event.deductionCar;
+    this.deductionTraining = $event.deductionTraining;
   }
-  receiveAdditionSicknessBenefit($event) {
-    this.additionSicknessBenefit = $event;
-  }
-  receiveDeductionCar($event) {
-    this.deductionCar = $event;
-  }
-  receiveDeductionTraining($event) {
-    this.deductionTraining = $event;
-  }
+
   receiveTotalHours($event) {
     this.totalHours = $event;
   }
@@ -247,7 +242,3 @@ export class MainComponent implements OnInit {
     this.totalPay = $event;
   }
 }
-
-//! usuwane funkcje (dlatego, że dodane zostają nowe w osobnym componencie niejako zastępujące je)
-// coś z netRate()
-// changeNormalHours()

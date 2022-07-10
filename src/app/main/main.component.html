@@ -105,7 +105,6 @@
   <!--  Card popup  -->
 
   <app-user-details
-    [counter]="counter"
     [dataSource]="dataSource"
     [Crew]="Crew"
     [popupActive]="popupActive"
@@ -150,20 +149,15 @@
     (outputDeductionForCarModel)="receiveDeductionForCarModel($event)"
     (outputDeductionForTrainingModel)="receiveDeductionForTrainingModel($event)"
     (outputPopupActive)="receivePopupActive($event)"
-    (outputNormalHours)="receiveNormalHours($event)"
-    (outputWeekendHours)="receiveWeekendHours($event)"
+    (outputHours)="receiveHours($event)"
     (outputSalaryNormalHours)="receiveSalaryNormalHours($event)"
     (outputSalaryWeekendHours)="receiveSalaryWeekendHours($event)"
-    (outputAdditionOwnHouse)="receiveAdditionOwnHouse($event)"
-    (outputAdditionQuaterBonus)="receiveAdditionQuaterBonus($event)"
-    (outputAdditionSicknessBenefit)="receiveAdditionSicknessBenefit($event)"
-    (outputDeductionCar)="receiveDeductionCar($event)"
-    (outputDeductionTraining)="receiveDeductionTraining($event)"
+    (outputAdditions)="receiveAdditions($event)"
+    (outputDeductions)="receiveDeductions($event)"
     (outputTotalHours)="receiveTotalHours($event)"
     (outputTotalSalary)="receiveTotalSalary($event)"
     (outputTotalAdditions)="receiveTotalAdditions($event)"
     (outputTotalDeductions)="receiveTotalDeductions($event)"
     (outputTotalPay)="receiveTotalPay($event)"
-    (outputNetRate)="receiveNetRate($event)"
   ></app-user-details>
 </div>

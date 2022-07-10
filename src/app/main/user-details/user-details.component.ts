@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Employee } from '../employee-model/employee.model';
+import { Employee } from '../models/employee-model/employee.model';
+import { Hours } from '../models/models-detail/hours.model';
 
 @Component({
   selector: 'app-user-details',
@@ -9,7 +10,6 @@ import { Employee } from '../employee-model/employee.model';
 export class UserDetailsComponent implements OnInit {
   @Input() Crew;
   @Input() dataSource;
-  @Input() counter;
 
   @Input() popupActive: boolean;
   @Input() changeNettoActive: boolean;
@@ -27,34 +27,23 @@ export class UserDetailsComponent implements OnInit {
   @Input() profession: string;
 
   @Input() netRate: number;
-  @Output() outputNetRate = new EventEmitter();
-
   @Input() normalHours: number;
-  @Output() outputNormalHours = new EventEmitter();
-
   @Input() weekendHours: number;
-  @Output() outputWeekendHours = new EventEmitter();
+  @Output() outputHours = new EventEmitter();
 
   @Input() salaryNormalHours: number;
   @Output() outputSalaryNormalHours = new EventEmitter();
-
   @Input() salaryWeekendHours: number;
   @Output() outputSalaryWeekendHours = new EventEmitter();
 
   @Input() additionOwnHouse: number;
-  @Output() outputAdditionOwnHouse = new EventEmitter();
-
   @Input() additionQuaterBonus: number;
-  @Output() outputAdditionQuaterBonus = new EventEmitter();
-
   @Input() additionSicknessBenefit: number;
-  @Output() outputAdditionSicknessBenefit = new EventEmitter();
+  @Output() outputAdditions = new EventEmitter();
 
   @Input() deductionCar: number;
-  @Output() outputDeductionCar = new EventEmitter();
-
   @Input() deductionTraining: number;
-  @Output() outputDeductionTraining = new EventEmitter();
+  @Output() outputDeductions = new EventEmitter();
 
   @Input() totalHours: number;
   @Output() outputTotalHours = new EventEmitter();
@@ -72,7 +61,7 @@ export class UserDetailsComponent implements OnInit {
   @Output() outputTotalPay = new EventEmitter();
 
   @Input() buttonConfirm: string;
-  // @Input() netRateModel: string; // to chyba odwrotnie (child->parent) ??
+
   currentId: string;
 
   netRateModel: number;
@@ -101,36 +90,36 @@ export class UserDetailsComponent implements OnInit {
     this.outputPopupActive.emit(this.popupActive);
   }
 
-  sendNetRate() {
-    this.outputNetRate.emit(this.netRate);
+  sendHours() {
+    this.outputHours.emit({
+      netRate: this.netRate,
+      normalHours: this.normalHours,
+      weekendHours: this.weekendHours,
+    });
   }
-  sendNormalHours() {
-    this.outputNormalHours.emit(this.normalHours);
-  }
-  sendWeekendHours() {
-    this.outputWeekendHours.emit(this.weekendHours);
-  }
+
   sendSalaryNormalHours() {
     this.outputSalaryNormalHours.emit(this.salaryNormalHours);
   }
   sendSalaryWeekendHours() {
     this.outputSalaryWeekendHours.emit(this.salaryWeekendHours);
   }
-  sendAdditionOwnHouse() {
-    this.outputAdditionOwnHouse.emit(this.additionOwnHouse);
+
+  sendAdditions() {
+    this.outputAdditions.emit({
+      additionOwnHouse: this.additionOwnHouse,
+      additionQuaterBonus: this.additionQuaterBonus,
+      additionSicknessBenefit: this.additionSicknessBenefit,
+    });
   }
-  sendAdditionQuaterBonus() {
-    this.outputAdditionQuaterBonus.emit(this.additionQuaterBonus);
+
+  sendDeductions() {
+    this.outputDeductions.emit({
+      deductionCar: this.deductionCar,
+      deductionTraining: this.deductionTraining,
+    });
   }
-  sendAdditionSicknessBenefit() {
-    this.outputAdditionSicknessBenefit.emit(this.additionSicknessBenefit);
-  }
-  sendDeductionCar() {
-    this.outputDeductionCar.emit(this.deductionCar);
-  }
-  sendDeductionTraining() {
-    this.outputDeductionTraining.emit(this.deductionTraining);
-  }
+
   sendTotalHours() {
     this.outputTotalHours.emit(this.totalHours);
   }
@@ -148,16 +137,11 @@ export class UserDetailsComponent implements OnInit {
   }
 
   gatherSendObjectData() {
-    this.sendNetRate();
-    this.sendNormalHours();
-    this.sendWeekendHours();
+    this.sendHours();
     this.sendSalaryNormalHours();
     this.sendSalaryWeekendHours();
-    this.sendAdditionOwnHouse();
-    this.sendAdditionQuaterBonus();
-    this.sendAdditionSicknessBenefit();
-    this.sendDeductionCar();
-    this.sendDeductionTraining();
+    this.sendAdditions();
+    this.sendDeductions();
     this.sendTotalHours();
     this.sendTotalSalary();
     this.sendTotalAdditions();
@@ -169,7 +153,6 @@ export class UserDetailsComponent implements OnInit {
 
   sendNetRateModel() {
     this.outputNetRateModel.emit(this.netRateModel);
-    // this.currentId = this.id;
 
     this.Crew.map((val) => {
       if (val.id === this.id) {
@@ -196,10 +179,10 @@ export class UserDetailsComponent implements OnInit {
     });
     this.netRateModel = null;
     this.changeNettoActive = false;
+    this.gatherSendObjectData();
   }
   sendNormalHoursModel() {
     this.outputNormalHoursModel.emit(this.normalHoursModel);
-    console.log(this.dataSource);
 
     this.Crew.map((val) => {
       if (val.id === this.id) {

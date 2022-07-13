@@ -62,42 +62,24 @@ export class MainComponent implements OnInit {
   employeeName: string = '';
   employeeSurname: string = '';
   employeeProfession: string = '';
-  //* netRateModel - ngModel
-  netRateModel: number;
-  normalHoursModel: number;
-  weekendHoursModel: number;
-  additionOwnHouseModel: number;
-  additionSicknessBenefitModel: number;
-  additionQuaterBonusModel: number;
-  deductionCarModel: number;
-  deductionTrainingModel: number;
+
+  netRateInpF: number;
+  normalHoursInpF: number;
+  weekendHoursInpF: number;
+  additionOwnHouseInpF: number;
+  additionQuaterBonusInpF: number;
+  additionSicknessBenefitInpF: number;
+  deductionCarInpF: number;
+  deductionTrainingInpF: number;
 
   currentId: string;
 
-  id: string;
-  name: string;
-  surname: string;
-  profession: string;
-  netRate: number;
-  normalHours: number = 0;
-  weekendHours: number = 0;
-  salaryNormalHours: number = 0;
-  salaryWeekendHours: number = 0;
-  additionOwnHouse: number = 0;
-  additionQuaterBonus: number = 0;
-  additionSicknessBenefit: number = 0;
-  deductionCar: number = 0;
-  deductionTraining: number = 0;
-  totalHours: number = 0;
-  totalSalary: number = 0;
-  totalAdditions: number = 0;
-  totalDeductions: number = 0;
-  totalPay: number = 0;
+  currentEmployee: Employee;
+  testObject;
 
   buttonConfirm = 'Confirm';
 
   createNewEmployee() {
-    //todo to jest ok jeśli nie ma opcji usuwania pracownika
     let newId = (Crew.length + 1).toString();
     if (newId.length === 2) {
       newId = `0${newId}`;
@@ -143,102 +125,41 @@ export class MainComponent implements OnInit {
       this.employeeProfession = '';
     }
   }
+
   getRowObject(row) {
     this.dataSource = [...Crew];
     this.popupActive = true;
+    this.currentEmployee = row;
 
-    this.id = row.id;
-    this.name = row.name;
-    this.surname = row.surname;
-    this.profession = row.profession;
-    this.netRate = row.netRate;
-    this.normalHours = row.normalHours ? row.normalHours : 0;
-    this.weekendHours = row.weekendHours ? row.weekendHours : 0;
-    this.salaryNormalHours = row.salaryNormalHours ? row.salaryNormalHours : 0;
-    this.salaryWeekendHours = row.salaryWeekendHours
-      ? row.salaryWeekendHours
-      : 0;
-    this.additionOwnHouse = row.additionOwnHouse ? row.additionOwnHouse : 0;
-    this.additionQuaterBonus = row.additionQuaterBonus
-      ? row.additionQuaterBonus
-      : 0;
-    this.additionSicknessBenefit = row.additionSicknessBenefit
-      ? row.additionSicknessBenefit
-      : 0;
-    this.deductionCar = row.deductionCar ? row.deductionCar : 0;
-    this.deductionTraining = row.deductionTraining ? row.deductionTraining : 0;
-    this.totalHours = row.totalHours ? row.totalHours : 0;
-    this.totalSalary = row.totalSalary ? row.totalSalary : 0;
-    this.totalAdditions = row.totalAdditions ? row.totalAdditions : 0;
-    this.totalDeductions = row.totalDeductions ? row.totalDeductions : 0;
-    this.totalPay = row.totalPay ? row.totalPay : 0;
+    Object.keys(this.currentEmployee).forEach((key) => {
+      if (this.currentEmployee[key] === undefined) {
+        this.currentEmployee[key] = 0;
+      }
+    });
   }
 
-  receiveNetRateModel($event) {
-    this.netRateModel = $event;
+  receiveCrew($event) {
+    this.Crew = $event;
   }
-  receiveNormalHoursModel($event) {
-    this.normalHoursModel = $event;
+
+  receiveHoursInpF($event) {
+    this.netRateInpF = $event.netRateInpF;
+    this.normalHoursInpF = $event.normalHoursInpF;
+    this.weekendHoursInpF = $event.weekendHoursInpF;
   }
-  receiveWeekendHoursModel($event) {
-    this.weekendHoursModel = $event;
+
+  receiveAdditionsInpF($event) {
+    this.additionOwnHouseInpF = $event;
+    this.additionQuaterBonusInpF = $event;
+    this.additionSicknessBenefitInpF = $event;
   }
-  receiveChangeBonusOwnHouseModel($event) {
-    this.additionOwnHouseModel = $event;
+
+  receiveDeductionsInpF($event) {
+    this.deductionCarInpF = $event;
+    this.deductionTrainingInpF = $event;
   }
-  receiveChangeBonusQuaterBonusModel($event) {
-    this.additionQuaterBonusModel = $event;
-  }
-  receiveChangeBonusSicknessBenefitModel($event) {
-    this.additionSicknessBenefitModel = $event;
-  }
-  receiveDeductionForCarModel($event) {
-    this.deductionCarModel = $event;
-  }
-  receiveDeductionForTrainingModel($event) {
-    this.deductionTrainingModel = $event;
-  }
+
   receivePopupActive($event) {
     this.popupActive = $event;
-  }
-
-  receiveHours($event) {
-    this.netRate = $event.netRate;
-    this.normalHours = $event.normalHours;
-    this.weekendHours = $event.weekendHours;
-  }
-
-  receiveSalaryNormalHours($event) {
-    this.salaryNormalHours = $event;
-  }
-  receiveSalaryWeekendHours($event) {
-    this.salaryWeekendHours = $event;
-  }
-
-  receiveAdditions($event) {
-    this.additionOwnHouse = $event.additionOwnHouse;
-    this.additionQuaterBonus = $event.additionQuaterBonus;
-    this.additionSicknessBenefit = $event.additionSicknessBenefit;
-  }
-
-  receiveDeductions($event) {
-    this.deductionCar = $event.deductionCar;
-    this.deductionTraining = $event.deductionTraining;
-  }
-
-  receiveTotalHours($event) {
-    this.totalHours = $event;
-  }
-  receiveTotalSalary($event) {
-    this.totalSalary = $event;
-  }
-  receiveTotalAdditions($event) {
-    this.totalAdditions = $event;
-  }
-  receiveTotalDeductions($event) {
-    this.totalDeductions = $event;
-  }
-  receiveTotalPay($event) {
-    this.totalPay = $event;
   }
 }

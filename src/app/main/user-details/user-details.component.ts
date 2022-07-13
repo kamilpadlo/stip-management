@@ -8,7 +8,10 @@ import { Hours } from '../models/models-detail/hours.model';
   styleUrls: ['./user-details.component.css'],
 })
 export class UserDetailsComponent implements OnInit {
+  @Input() currentEmployee;
   @Input() Crew;
+
+  @Output() outputCrew = new EventEmitter();
   @Input() dataSource;
 
   @Input() popupActive: boolean;
@@ -21,354 +24,214 @@ export class UserDetailsComponent implements OnInit {
   @Input() carDeductionActive: boolean;
   @Input() trainingDeductionActive: boolean;
 
-  @Input() id: string;
-  @Input() name: string;
-  @Input() surname: string;
-  @Input() profession: string;
-
-  @Input() netRate: number;
-  @Input() normalHours: number;
-  @Input() weekendHours: number;
-  @Output() outputHours = new EventEmitter();
-
-  @Input() salaryNormalHours: number;
-  @Output() outputSalaryNormalHours = new EventEmitter();
-  @Input() salaryWeekendHours: number;
-  @Output() outputSalaryWeekendHours = new EventEmitter();
-
-  @Input() additionOwnHouse: number;
-  @Input() additionQuaterBonus: number;
-  @Input() additionSicknessBenefit: number;
-  @Output() outputAdditions = new EventEmitter();
-
-  @Input() deductionCar: number;
-  @Input() deductionTraining: number;
-  @Output() outputDeductions = new EventEmitter();
-
-  @Input() totalHours: number;
-  @Output() outputTotalHours = new EventEmitter();
-
-  @Input() totalSalary: number;
-  @Output() outputTotalSalary = new EventEmitter();
-
-  @Input() totalAdditions: number;
-  @Output() outputTotalAdditions = new EventEmitter();
-
-  @Input() totalDeductions: number;
-  @Output() outputTotalDeductions = new EventEmitter();
-
-  @Input() totalPay: number;
-  @Output() outputTotalPay = new EventEmitter();
-
   @Input() buttonConfirm: string;
 
-  currentId: string;
+  netRateInpF: number;
+  normalHoursInpF: number;
+  weekendHoursInpF: number;
+  additionOwnHouseInpF: number;
+  additionQuaterBonusInpF: number;
+  additionSicknessBenefitInpF: number;
+  deductionCarInpF: number;
+  deductionTrainingInpF: number;
 
-  netRateModel: number;
-  normalHoursModel: number;
-  weekendHoursModel: number;
-  additionOwnHouseModel: number;
-  additionQuaterBonusModel: number;
-  additionSicknessBenefitModel: number;
-  deductionCarModel: number;
-  deductionTrainingModel: number;
-
-  @Output() outputNetRateModel = new EventEmitter();
-  @Output() outputNormalHoursModel = new EventEmitter();
-  @Output() outputWeekendHoursModel = new EventEmitter();
-  @Output() outputChangeBonusOwnHouseModel = new EventEmitter();
-  @Output() outputChangeBonusQuaterBonusModel = new EventEmitter();
-  @Output() outputChangeBonusSicknessBenefitModel = new EventEmitter();
-
-  @Output() outputDeductionForCarModel = new EventEmitter();
-  @Output() outputDeductionForTrainingModel = new EventEmitter();
+  @Output() outputHoursInpF = new EventEmitter();
+  @Output() outputAdditionsInpF = new EventEmitter();
+  @Output() outputDeductionsInpF = new EventEmitter();
 
   @Output() outputPopupActive = new EventEmitter();
+
+  sendCrew() {
+    this.outputCrew.emit(this.Crew);
+  }
 
   sendPopupActive() {
     this.popupActive = false;
     this.outputPopupActive.emit(this.popupActive);
   }
 
-  sendHours() {
-    this.outputHours.emit({
-      netRate: this.netRate,
-      normalHours: this.normalHours,
-      weekendHours: this.weekendHours,
-    });
-  }
-
-  sendSalaryNormalHours() {
-    this.outputSalaryNormalHours.emit(this.salaryNormalHours);
-  }
-  sendSalaryWeekendHours() {
-    this.outputSalaryWeekendHours.emit(this.salaryWeekendHours);
-  }
-
-  sendAdditions() {
-    this.outputAdditions.emit({
-      additionOwnHouse: this.additionOwnHouse,
-      additionQuaterBonus: this.additionQuaterBonus,
-      additionSicknessBenefit: this.additionSicknessBenefit,
-    });
-  }
-
-  sendDeductions() {
-    this.outputDeductions.emit({
-      deductionCar: this.deductionCar,
-      deductionTraining: this.deductionTraining,
-    });
-  }
-
-  sendTotalHours() {
-    this.outputTotalHours.emit(this.totalHours);
-  }
-  sendTotalSalary() {
-    this.outputTotalSalary.emit(this.totalSalary);
-  }
-  sendTotalAdditions() {
-    this.outputTotalAdditions.emit(this.totalAdditions);
-  }
-  sendTotalDeductions() {
-    this.outputTotalDeductions.emit(this.totalDeductions);
-  }
-  sendTotalPay() {
-    this.outputTotalPay.emit(this.totalPay);
-  }
-
-  gatherSendObjectData() {
-    this.sendHours();
-    this.sendSalaryNormalHours();
-    this.sendSalaryWeekendHours();
-    this.sendAdditions();
-    this.sendDeductions();
-    this.sendTotalHours();
-    this.sendTotalSalary();
-    this.sendTotalAdditions();
-    this.sendTotalDeductions();
-    this.sendTotalPay();
-  }
-
   constructor() {}
 
-  sendNetRateModel() {
-    this.outputNetRateModel.emit(this.netRateModel);
+  sendHoursInpF() {
+    this.outputHoursInpF.emit({
+      netRateInpF: this.netRateInpF,
+      normalHoursInpF: this.normalHoursInpF,
+      weekendHoursInpF: this.weekendHoursInpF,
+    });
 
     this.Crew.map((val) => {
-      if (val.id === this.id) {
-        val.netRate = this.netRateModel;
-        this.netRate = this.netRateModel;
+      if (val.id === this.currentEmployee.id) {
+        if (this.netRateInpF !== null && this.netRateInpF !== undefined) {
+          val.netRate = this.netRateInpF;
+          this.currentEmployee.netRate = this.netRateInpF;
+        }
 
-        val.salaryNormalHours = this.normalHours * this.netRate;
-        this.salaryNormalHours = this.normalHours * this.netRate;
+        if (
+          this.normalHoursInpF !== null &&
+          this.normalHoursInpF !== undefined
+        ) {
+          val.normalHours = this.normalHoursInpF;
+          this.currentEmployee.normalHours = this.normalHoursInpF;
+        }
 
-        val.salaryWeekendHours = this.weekendHours * this.netRate * 1.5;
-        this.salaryWeekendHours = this.weekendHours * this.netRate * 1.5;
+        if (
+          this.weekendHoursInpF !== null &&
+          this.weekendHoursInpF !== undefined
+        ) {
+          val.weekendHours = this.weekendHoursInpF;
+          this.currentEmployee.weekendHours = this.weekendHoursInpF;
+        }
 
-        val.totalHours = this.normalHours + this.weekendHours;
-        this.totalHours = this.normalHours + this.weekendHours;
+        val.salaryNormalHours =
+          this.currentEmployee.normalHours * this.currentEmployee.netRate;
+        this.currentEmployee.salaryNormalHours =
+          this.currentEmployee.normalHours * this.currentEmployee.netRate;
 
-        val.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-        this.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
+        val.salaryWeekendHours =
+          this.currentEmployee.weekendHours *
+          this.currentEmployee.netRate *
+          1.5;
+        this.currentEmployee.salaryWeekendHours =
+          this.currentEmployee.weekendHours *
+          this.currentEmployee.netRate *
+          1.5;
+
+        val.totalHours =
+          this.currentEmployee.normalHours + this.currentEmployee.weekendHours;
+        this.currentEmployee.totalHours =
+          this.currentEmployee.normalHours + this.currentEmployee.weekendHours;
+
+        val.totalSalary =
+          this.currentEmployee.salaryNormalHours +
+          this.currentEmployee.salaryWeekendHours;
+        this.currentEmployee.totalSalary =
+          this.currentEmployee.salaryNormalHours +
+          this.currentEmployee.salaryWeekendHours;
 
         val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
+          this.currentEmployee.totalSalary +
+          this.currentEmployee.totalAdditions -
+          this.currentEmployee.totalDeductions;
+        this.currentEmployee.totalPay =
+          this.currentEmployee.totalSalary +
+          this.currentEmployee.totalAdditions -
+          this.currentEmployee.totalDeductions;
       }
     });
-    this.netRateModel = null;
     this.changeNettoActive = false;
-    this.gatherSendObjectData();
-  }
-  sendNormalHoursModel() {
-    this.outputNormalHoursModel.emit(this.normalHoursModel);
-
-    this.Crew.map((val) => {
-      if (val.id === this.id) {
-        val.normalHours = this.normalHoursModel;
-        this.normalHours = this.normalHoursModel;
-
-        val.salaryNormalHours = this.normalHours * this.netRate;
-        this.salaryNormalHours = this.normalHours * this.netRate;
-
-        val.totalHours = this.normalHours + this.weekendHours;
-        this.totalHours = this.normalHours + this.weekendHours;
-
-        val.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-        this.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.normalHoursModel = null;
     this.changeNormalHoursActive = false;
-
-    this.gatherSendObjectData();
-  }
-
-  sendWeekendHoursModel() {
-    this.outputWeekendHoursModel.emit(this.weekendHoursModel);
-    this.currentId = this.id;
-
-    this.Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.weekendHours = this.weekendHoursModel;
-        this.weekendHours = this.weekendHoursModel;
-
-        val.salaryWeekendHours = this.weekendHours * this.netRate * 1.5;
-        this.salaryWeekendHours = this.weekendHours * this.netRate * 1.5;
-
-        val.totalHours = this.normalHours + this.weekendHours;
-        this.totalHours = this.normalHours + this.weekendHours;
-
-        val.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-        this.totalSalary = this.salaryNormalHours + this.salaryWeekendHours;
-
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.weekendHoursModel = null;
     this.changeWeekendHoursActive = false;
 
-    this.gatherSendObjectData();
+    this.netRateInpF = null;
+    this.normalHoursInpF = null;
+    this.weekendHoursInpF = null;
+    console.log(this.currentEmployee);
   }
 
-  sendChangeBonusOwnHouseModel() {
-    this.outputChangeBonusOwnHouseModel.emit(this.additionOwnHouseModel);
-    this.currentId = this.id;
-
-    this.additionOwnHouse = this.additionOwnHouseModel;
-    this.totalPay =
-      this.totalSalary + this.totalAdditions - this.totalDeductions;
-    this.totalAdditions =
-      this.additionOwnHouse +
-      this.additionQuaterBonus +
-      this.additionSicknessBenefit;
+  sendAdditionsInpF() {
+    this.outputAdditionsInpF.emit({
+      additionOwnHouseInpF: this.additionOwnHouseInpF,
+      additionQuaterBonusInpF: this.additionQuaterBonusInpF,
+      additionSicknessBenefitInpF: this.additionSicknessBenefitInpF,
+    });
 
     this.Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.additionOwnHouse = this.additionOwnHouseModel;
+      if (val.id === this.currentEmployee.id) {
+        if (
+          this.additionOwnHouseInpF !== null &&
+          this.additionOwnHouseInpF !== undefined
+        ) {
+          val.additionOwnHouse = this.additionOwnHouseInpF;
+          this.currentEmployee.additionOwnHouse = this.additionOwnHouseInpF;
+        }
+        if (
+          this.additionQuaterBonusInpF !== null &&
+          this.additionQuaterBonusInpF !== undefined
+        ) {
+          val.additionQuaterBonus = this.additionQuaterBonusInpF;
+          this.currentEmployee.additionQuaterBonus =
+            this.additionQuaterBonusInpF;
+        }
+        if (
+          this.additionSicknessBenefitInpF !== null &&
+          this.additionSicknessBenefitInpF !== undefined
+        ) {
+          val.additionSicknessBenefit = this.additionSicknessBenefitInpF;
+          this.currentEmployee.additionSicknessBenefit =
+            this.additionSicknessBenefitInpF;
+        }
+
         val.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
+          this.currentEmployee.additionOwnHouse +
+          this.currentEmployee.additionQuaterBonus +
+          this.currentEmployee.additionSicknessBenefit;
+        this.currentEmployee.totalAdditions =
+          this.currentEmployee.additionOwnHouse +
+          this.currentEmployee.additionQuaterBonus +
+          this.currentEmployee.additionSicknessBenefit;
+
         val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
+          this.currentEmployee.totalSalary +
+          this.currentEmployee.totalAdditions -
+          this.currentEmployee.totalDeductions;
+        this.currentEmployee.totalPay =
+          this.currentEmployee.totalSalary +
+          this.currentEmployee.totalAdditions -
+          this.currentEmployee.totalDeductions;
       }
     });
-    this.additionOwnHouseModel = null;
     this.ownHouseActive = false;
-    this.gatherSendObjectData();
-  }
-
-  sendChangeBonusQuaterBonusModel() {
-    this.outputChangeBonusQuaterBonusModel.emit(this.additionQuaterBonusModel);
-    this.currentId = this.id;
-
-    this.Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.additionQuaterBonus = this.additionQuaterBonusModel;
-        this.additionQuaterBonus = this.additionQuaterBonusModel;
-
-        val.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
-        this.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
-
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.additionQuaterBonusModel = null;
     this.changeQuaterBonusActive = false;
-    this.gatherSendObjectData();
-  }
-
-  sendChangeBonusSicknessBenefitModel() {
-    this.outputChangeBonusSicknessBenefitModel.emit(
-      this.additionSicknessBenefitModel
-    );
-    this.currentId = this.id;
-    this.Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.additionSicknessBenefit = this.additionSicknessBenefitModel;
-        this.additionSicknessBenefit = this.additionSicknessBenefitModel;
-
-        val.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
-        this.totalAdditions =
-          this.additionOwnHouse +
-          this.additionQuaterBonus +
-          this.additionSicknessBenefit;
-
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.additionSicknessBenefitModel = null;
     this.changeSicknessBenefitActive = false;
-    this.gatherSendObjectData();
+    this.additionOwnHouseInpF = null;
+    this.additionQuaterBonusInpF = null;
+    this.additionSicknessBenefitInpF = null;
   }
 
-  sendDeductionForCarModel() {
-    this.outputDeductionForCarModel.emit(this.deductionCarModel);
-    this.currentId = this.id;
+  sendDeductionsInpF() {
+    this.outputDeductionsInpF.emit({
+      deductionCarInpF: this.deductionCarInpF,
+      deductionTrainingInpF: this.deductionTrainingInpF,
+    });
     this.Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.deductionCar = this.deductionCarModel;
-        this.deductionCar = this.deductionCarModel;
+      if (val.id === this.currentEmployee.id) {
+        if (
+          this.deductionCarInpF !== null &&
+          this.deductionCarInpF !== undefined
+        ) {
+          val.deductionCar = this.deductionCarInpF;
+          this.currentEmployee.deductionCar = this.deductionCarInpF;
+        }
 
-        val.totalDeductions = this.deductionCar + this.deductionTraining;
-        this.totalDeductions = this.deductionCar + this.deductionTraining;
+        if (
+          this.deductionTrainingInpF !== null &&
+          this.deductionTrainingInpF !== undefined
+        ) {
+          val.deductionTraining = this.deductionTrainingInpF;
+          this.currentEmployee.deductionTraining = this.deductionTrainingInpF;
+        }
+
+        val.totalDeductions =
+          this.currentEmployee.deductionCar +
+          this.currentEmployee.deductionTraining;
+        this.currentEmployee.totalDeductions =
+          this.currentEmployee.deductionCar +
+          this.currentEmployee.deductionTraining;
 
         val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
+          this.currentEmployee.totalSalary +
+          this.currentEmployee.totalAdditions -
+          this.currentEmployee.totalDeductions;
+        this.currentEmployee.totalPay =
+          this.currentEmployee.totalSalary +
+          this.currentEmployee.totalAdditions -
+          this.currentEmployee.totalDeductions;
       }
     });
-    this.deductionCarModel = null;
+    this.deductionCarInpF = null;
+    this.deductionTrainingInpF = null;
     this.carDeductionActive = false;
-    this.gatherSendObjectData();
-  }
-
-  sendDeductionForTrainingModel() {
-    this.outputDeductionForTrainingModel.emit(this.deductionTrainingModel);
-    this.currentId = this.id;
-    this.Crew.map((val) => {
-      if (val.id === this.currentId) {
-        val.deductionTraining = this.deductionTrainingModel;
-        this.deductionTraining = this.deductionTrainingModel;
-
-        val.totalDeductions = this.deductionCar + this.deductionTraining;
-        this.totalDeductions = this.deductionCar + this.deductionTraining;
-
-        val.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-        this.totalPay =
-          this.totalSalary + this.totalAdditions - this.totalDeductions;
-      }
-    });
-    this.deductionTrainingModel = null;
     this.trainingDeductionActive = false;
-    this.gatherSendObjectData();
   }
 
   ngOnInit(): void {}

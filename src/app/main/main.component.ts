@@ -44,40 +44,19 @@ export class MainComponent implements OnInit {
     'demo-profession',
     'demo-details',
   ];
+
   dataSource = [...Crew];
 
   @ViewChild(MatTable) table: MatTable<Employee>;
 
   popupActive: boolean;
   popupAddEmployeeActive: boolean = false;
-  changeNettoActive: boolean = false;
-  changeNormalHoursActive: boolean = false;
-  changeWeekendHoursActive: boolean = false;
-  ownHouseActive: boolean = false;
-  changeQuaterBonusActive: boolean = false;
-  changeSicknessBenefitActive: boolean = false;
-  carDeductionActive: boolean = false;
-  trainingDeductionActive: boolean = false;
 
   employeeName: string = '';
   employeeSurname: string = '';
   employeeProfession: string = '';
 
-  netRateInpF: number;
-  normalHoursInpF: number;
-  weekendHoursInpF: number;
-  additionOwnHouseInpF: number;
-  additionQuaterBonusInpF: number;
-  additionSicknessBenefitInpF: number;
-  deductionCarInpF: number;
-  deductionTrainingInpF: number;
-
-  currentId: string;
-
   currentEmployee: Employee;
-  testObject;
-
-  buttonConfirm = 'Confirm';
 
   createNewEmployee() {
     let newId = (Crew.length + 1).toString();
@@ -91,22 +70,18 @@ export class MainComponent implements OnInit {
       this.employeeSurname.charAt(0).toUpperCase() +
       this.employeeSurname.slice(1);
 
-    Crew.push({
-      id: newId,
-      name: emplName,
-      surname: emplSurame,
-      netRate: 15,
-      profession: this.employeeProfession,
-    });
+    Crew.push(
+      new Employee(newId, emplName, emplSurame, 15, this.employeeProfession)
+    );
     this.dataSource = [...Crew];
 
-    return {
-      id: newId,
-      name: emplName,
-      surname: emplSurame,
-      netRate: 15,
-      profession: this.employeeProfession,
-    };
+    return new Employee(
+      newId,
+      emplName,
+      emplSurame,
+      15,
+      this.employeeProfession
+    );
   }
 
   addNewEmployee() {
@@ -136,27 +111,9 @@ export class MainComponent implements OnInit {
         this.currentEmployee[key] = 0;
       }
     });
-  }
 
-  receiveCrew($event) {
-    this.Crew = $event;
-  }
-
-  receiveHoursInpF($event) {
-    this.netRateInpF = $event.netRateInpF;
-    this.normalHoursInpF = $event.normalHoursInpF;
-    this.weekendHoursInpF = $event.weekendHoursInpF;
-  }
-
-  receiveAdditionsInpF($event) {
-    this.additionOwnHouseInpF = $event;
-    this.additionQuaterBonusInpF = $event;
-    this.additionSicknessBenefitInpF = $event;
-  }
-
-  receiveDeductionsInpF($event) {
-    this.deductionCarInpF = $event;
-    this.deductionTrainingInpF = $event;
+    console.log(this.currentEmployee);
+    console.log(this.Crew);
   }
 
   receivePopupActive($event) {

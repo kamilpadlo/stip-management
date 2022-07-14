@@ -12,110 +12,37 @@
 
   <mat-card-actions class="tab-container">
     <mat-tab-group mat-align-tabs="center">
-      <mat-tab label="Hours">
+      <mat-tab class="hours-wrapper" label="Hours">
         <div class="netto-rate detail-row">
           <div class="netto-rate-wrapper">
             <p class="tab-data">Netto Rate</p>
-            <button
-              class="tab-button"
-              (click)="changeNettoActive = !changeNettoActive"
-              mat-raised-button
-              color="primary"
-            >
-              Change Netto Rate
-            </button>
-            <mat-form-field
-              class="tab-form"
-              *ngIf="changeNettoActive"
-              appearance="fill"
-            >
-              <mat-label>New Netto Rate</mat-label>
-              <input [(ngModel)]="netRateInpF" type="number" matInput #input />
-            </mat-form-field>
-            <button
-              *ngIf="changeNettoActive"
-              (click)="sendHoursInpF()"
-              class="tab-button"
-              mat-raised-button
-              color="primary"
-            >
-              {{ buttonConfirm }}
-            </button>
           </div>
           <p class="tab-data spacer">{{ currentEmployee.netRate }}€</p>
         </div>
         <hr />
         <div class="normal-hours detail-row">
           <p class="tab-data">Normal Hours</p>
-          <button
-            class="tab-button"
-            (click)="changeNormalHoursActive = !changeNormalHoursActive"
-            mat-raised-button
-            color="primary"
-          >
-            Add Normal Hours
-          </button>
-          <mat-form-field
-            class="tab-form"
-            *ngIf="changeNormalHoursActive"
-            appearance="fill"
-          >
-            <mat-label>Change Normal Hours</mat-label>
-            <input
-              [(ngModel)]="normalHoursInpF"
-              type="number"
-              matInput
-              #input
-            />
-          </mat-form-field>
-          <button
-            *ngIf="changeNormalHoursActive"
-            (click)="sendHoursInpF()"
-            class="tab-button"
-            mat-raised-button
-            color="primary"
-          >
-            {{ buttonConfirm }}
-          </button>
           <p class="tab-data spacer">{{ currentEmployee.normalHours }}</p>
         </div>
 
         <hr />
         <div class="weekend-hours detail-row">
           <p class="tab-data">Weekend Hours</p>
-          <button
-            class="tab-button"
-            (click)="changeWeekendHoursActive = !changeWeekendHoursActive"
-            mat-raised-button
-            color="primary"
-          >
-            Add Weekend Hours
-          </button>
-          <mat-form-field
-            class="tab-form"
-            *ngIf="changeWeekendHoursActive"
-            appearance="fill"
-          >
-            <mat-label>Change Weekend Hours</mat-label>
-            <input
-              [(ngModel)]="weekendHoursInpF"
-              type="number"
-              matInput
-              #input
-            />
-          </mat-form-field>
-          <button
-            *ngIf="changeWeekendHoursActive"
-            (click)="sendHoursInpF()"
-            class="tab-button"
-            mat-raised-button
-            color="primary"
-          >
-            {{ buttonConfirm }}
-          </button>
           <p class="tab-data spacer">{{ currentEmployee.weekendHours }}</p>
         </div>
+        <hr />
+        <div class="btn-change-hours-container">
+          <button
+            class="tab-button"
+            (click)="popupAddHoursActive = !popupAddHoursActive"
+            mat-raised-button
+            color="primary"
+          >
+            Change Hours
+          </button>
+        </div>
       </mat-tab>
+
       <mat-tab label="Salary">
         <div class="salary-normal-hours detail-row">
           <p class="tab-data">Salary for Normal Hours:</p>
@@ -158,7 +85,7 @@
           </mat-form-field>
           <button
             *ngIf="ownHouseActive"
-            (click)="sendAdditionsInpF()"
+            (click)="changeAdditions()"
             class="tab-button"
             mat-raised-button
             color="primary"
@@ -194,7 +121,7 @@
           </mat-form-field>
           <button
             *ngIf="changeQuaterBonusActive"
-            (click)="sendAdditionsInpF()"
+            (click)="changeAdditions()"
             class="tab-button"
             mat-raised-button
             color="primary"
@@ -232,7 +159,7 @@
           </mat-form-field>
           <button
             *ngIf="changeSicknessBenefitActive"
-            (click)="sendAdditionsInpF()"
+            (click)="changeAdditions()"
             class="tab-button"
             mat-raised-button
             color="primary"
@@ -270,7 +197,7 @@
           </mat-form-field>
           <button
             *ngIf="carDeductionActive"
-            (click)="sendDeductionsInpF()"
+            (click)="changeDeductions()"
             class="tab-button"
             mat-raised-button
             color="primary"
@@ -306,7 +233,7 @@
           </mat-form-field>
           <button
             *ngIf="trainingDeductionActive"
-            (click)="sendDeductionsInpF()"
+            (click)="changeDeductions()"
             class="tab-button"
             mat-raised-button
             color="primary"
@@ -346,5 +273,44 @@
         </div>
       </mat-tab>
     </mat-tab-group>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card *ngIf="popupAddHoursActive" class="card-popup-small">
+  <div class="card-title-wrapper">
+    <mat-card-title style="width: 50%"
+      >CHANGE NET RATE / CHANGE HOURS
+    </mat-card-title>
+    <div class="spacer" style="width: 100%"></div>
+    <mat-icon (click)="popupAddHoursActive = false" class="close"
+      >close</mat-icon
+    >
+  </div>
+
+  <mat-card-actions>
+    <div class="form">
+      <mat-form-field class="tab-form" appearance="fill">
+        <mat-label>New Netto Rate</mat-label>
+        <input [(ngModel)]="netRateInpF" type="number" matInput #input />
+      </mat-form-field>
+
+      <mat-form-field class="tab-form" appearance="fill">
+        <mat-label>Change Normal Hours</mat-label>
+        <input [(ngModel)]="normalHoursInpF" type="number" matInput #input />
+      </mat-form-field>
+
+      <mat-form-field class="tab-form" appearance="fill">
+        <mat-label>Change Weekend Hours</mat-label>
+        <input [(ngModel)]="weekendHoursInpF" type="number" matInput #input />
+      </mat-form-field>
+      <button
+        (click)="changeHours()"
+        class="tab-button"
+        mat-raised-button
+        color="primary"
+      >
+        {{ buttonConfirm }}
+      </button>
+    </div>
   </mat-card-actions>
 </mat-card>

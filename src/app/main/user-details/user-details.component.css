@@ -61,10 +61,11 @@
 .card-popup-small {
   position: absolute;
   width: 40%;
-  /* height: 40%; */
+
   top: 30%;
   left: 30%;
   background: #ddd;
+  z-index: 3;
 }
 .card-title-wrapper {
   display: flex;
@@ -99,9 +100,9 @@ mat-card-title.id {
 mat-icon.close:hover {
   cursor: pointer;
 }
-/* .tab-container {
-  height: 100%;
-} */
+.tab-container {
+  position: relative;
+}
 .tab-data {
   font-size: 34px;
   margin: 10px;
@@ -129,4 +130,15 @@ mat-icon.close:hover {
 
 .view-details {
   opacity: 0;
+}
+
+.hours-wrapper {
+  background: green;
+}
+
+.btn-change-hours-container {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  margin-top: 20px;
 }

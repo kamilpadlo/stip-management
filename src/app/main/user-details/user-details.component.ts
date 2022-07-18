@@ -8,12 +8,16 @@ import { Hours } from '../models/models-detail/hours.model';
   styleUrls: ['./user-details.component.css'],
 })
 export class UserDetailsComponent implements OnInit {
-  @Input() currentEmployee;
+  @Input() employee;
   @Input() popupActive: boolean;
 
   buttonConfirm = 'Confirm';
 
   popupAddHoursActive: boolean = false;
+
+  nettoRateActive: boolean = false;
+  normalHoursActive: boolean = false;
+  weekendHoursActive: boolean = false;
 
   ownHouseActive: boolean = false;
   changeQuaterBonusActive: boolean = false;
@@ -40,34 +44,33 @@ export class UserDetailsComponent implements OnInit {
 
   changeHours() {
     if (this.netRateInpF !== null && this.netRateInpF !== undefined) {
-      this.currentEmployee.netRate = this.netRateInpF;
+      this.employee.netRate = this.netRateInpF;
     }
 
     if (this.normalHoursInpF !== null && this.normalHoursInpF !== undefined) {
-      this.currentEmployee.normalHours = this.normalHoursInpF;
+      this.employee.normalHours = this.normalHoursInpF;
     }
 
     if (this.weekendHoursInpF !== null && this.weekendHoursInpF !== undefined) {
-      this.currentEmployee.weekendHours = this.weekendHoursInpF;
+      this.employee.weekendHours = this.weekendHoursInpF;
     }
 
-    this.currentEmployee.salaryNormalHours =
-      this.currentEmployee.normalHours * this.currentEmployee.netRate;
+    this.employee.salaryNormalHours =
+      this.employee.normalHours * this.employee.netRate;
 
-    this.currentEmployee.salaryWeekendHours =
-      this.currentEmployee.weekendHours * this.currentEmployee.netRate * 1.5;
+    this.employee.salaryWeekendHours =
+      this.employee.weekendHours * this.employee.netRate * 1.5;
 
-    this.currentEmployee.totalHours =
-      this.currentEmployee.normalHours + this.currentEmployee.weekendHours;
+    this.employee.totalHours =
+      this.employee.normalHours + this.employee.weekendHours;
 
-    this.currentEmployee.totalSalary =
-      this.currentEmployee.salaryNormalHours +
-      this.currentEmployee.salaryWeekendHours;
+    this.employee.totalSalary =
+      this.employee.salaryNormalHours + this.employee.salaryWeekendHours;
 
-    this.currentEmployee.totalPay =
-      this.currentEmployee.totalSalary +
-      this.currentEmployee.totalAdditions -
-      this.currentEmployee.totalDeductions;
+    this.employee.totalPay =
+      this.employee.totalSalary +
+      this.employee.totalAdditions -
+      this.employee.totalDeductions;
 
     this.popupAddHoursActive = false;
 
@@ -81,35 +84,31 @@ export class UserDetailsComponent implements OnInit {
       this.additionOwnHouseInpF !== null &&
       this.additionOwnHouseInpF !== undefined
     ) {
-      this.currentEmployee.additionOwnHouse = this.additionOwnHouseInpF;
+      this.employee.additionOwnHouse = this.additionOwnHouseInpF;
     }
     if (
       this.additionQuaterBonusInpF !== null &&
       this.additionQuaterBonusInpF !== undefined
     ) {
-      this.currentEmployee.additionQuaterBonus = this.additionQuaterBonusInpF;
+      this.employee.additionQuaterBonus = this.additionQuaterBonusInpF;
     }
     if (
       this.additionSicknessBenefitInpF !== null &&
       this.additionSicknessBenefitInpF !== undefined
     ) {
-      this.currentEmployee.additionSicknessBenefit =
-        this.additionSicknessBenefitInpF;
+      this.employee.additionSicknessBenefit = this.additionSicknessBenefitInpF;
     }
 
-    this.currentEmployee.totalAdditions =
-      this.currentEmployee.additionOwnHouse +
-      this.currentEmployee.additionQuaterBonus +
-      this.currentEmployee.additionSicknessBenefit;
+    this.employee.totalAdditions =
+      this.employee.additionOwnHouse +
+      this.employee.additionQuaterBonus +
+      this.employee.additionSicknessBenefit;
 
-    this.currentEmployee.totalPay =
-      this.currentEmployee.totalSalary +
-      this.currentEmployee.totalAdditions -
-      this.currentEmployee.totalDeductions;
+    this.employee.totalPay =
+      this.employee.totalSalary +
+      this.employee.totalAdditions -
+      this.employee.totalDeductions;
 
-    this.ownHouseActive = false;
-    this.changeQuaterBonusActive = false;
-    this.changeSicknessBenefitActive = false;
     this.additionOwnHouseInpF = null;
     this.additionQuaterBonusInpF = null;
     this.additionSicknessBenefitInpF = null;
@@ -117,29 +116,26 @@ export class UserDetailsComponent implements OnInit {
 
   changeDeductions() {
     if (this.deductionCarInpF !== null && this.deductionCarInpF !== undefined) {
-      this.currentEmployee.deductionCar = this.deductionCarInpF;
+      this.employee.deductionCar = this.deductionCarInpF;
     }
 
     if (
       this.deductionTrainingInpF !== null &&
       this.deductionTrainingInpF !== undefined
     ) {
-      this.currentEmployee.deductionTraining = this.deductionTrainingInpF;
+      this.employee.deductionTraining = this.deductionTrainingInpF;
     }
 
-    this.currentEmployee.totalDeductions =
-      this.currentEmployee.deductionCar +
-      this.currentEmployee.deductionTraining;
+    this.employee.totalDeductions =
+      this.employee.deductionCar + this.employee.deductionTraining;
 
-    this.currentEmployee.totalPay =
-      this.currentEmployee.totalSalary +
-      this.currentEmployee.totalAdditions -
-      this.currentEmployee.totalDeductions;
+    this.employee.totalPay =
+      this.employee.totalSalary +
+      this.employee.totalAdditions -
+      this.employee.totalDeductions;
 
     this.deductionCarInpF = null;
     this.deductionTrainingInpF = null;
-    this.carDeductionActive = false;
-    this.trainingDeductionActive = false;
   }
 
   ngOnInit(): void {}

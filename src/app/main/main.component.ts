@@ -56,7 +56,15 @@ export class MainComponent implements OnInit {
   employeeSurname: string = '';
   employeeProfession: string = '';
 
-  currentEmployee: Employee;
+  employee: Employee;
+
+  idSorted: boolean = false;
+  surnameSorted: boolean = false;
+  professionSorted: boolean = false;
+
+  arrowId;
+  arrowSurname;
+  arrowProfession;
 
   createNewEmployee() {
     let newId = (Crew.length + 1).toString();
@@ -104,19 +112,79 @@ export class MainComponent implements OnInit {
   getRowObject(row) {
     this.dataSource = [...Crew];
     this.popupActive = true;
-    this.currentEmployee = row;
+    this.employee = row;
 
-    Object.keys(this.currentEmployee).forEach((key) => {
-      if (this.currentEmployee[key] === undefined) {
-        this.currentEmployee[key] = 0;
+    Object.keys(this.employee).forEach((key) => {
+      if (this.employee[key] === undefined) {
+        this.employee[key] = 0;
       }
     });
-
-    console.log(this.currentEmployee);
-    console.log(this.Crew);
   }
 
   receivePopupActive($event) {
     this.popupActive = $event;
+  }
+
+  sortById() {
+    if (this.idSorted === false) {
+      Crew.sort((a, b) => (+a.id > +b.id ? -1 : 1));
+      this.arrowId = 'arrow_upward';
+    }
+    if (this.idSorted === true) {
+      Crew.sort((a, b) => (+a.id > +b.id ? 1 : -1));
+      this.arrowId = 'arrow_downward';
+    }
+    this.idSorted = !this.idSorted;
+    this.arrowSurname = 'sort';
+    this.arrowProfession = 'sort';
+    this.dataSource = [...Crew];
+  }
+
+  sortBySurname() {
+    if (this.surnameSorted === false) {
+      Crew.sort((a, b) => (a.surname > b.surname ? 1 : -1));
+      this.arrowSurname = 'arrow_downward';
+    }
+    if (this.surnameSorted === true) {
+      Crew.sort((a, b) => (a.surname > b.surname ? -1 : 1));
+      this.arrowSurname = 'arrow_upward';
+    }
+    this.surnameSorted = !this.surnameSorted;
+    this.arrowId = 'sort';
+    this.arrowProfession = 'sort';
+    this.dataSource = [...Crew];
+  }
+
+  sortByProfession() {
+    if (this.professionSorted === false) {
+      Crew.sort((a, b) =>
+        a.profession > b.profession
+          ? 1
+          : a.profession === b.profession
+          ? a.surname > b.surname
+            ? 1
+            : -1
+          : -1
+      );
+
+      this.arrowProfession = 'arrow_downward';
+    }
+    if (this.professionSorted === true) {
+      Crew.sort((a, b) =>
+        a.profession > b.profession
+          ? -1
+          : a.profession === b.profession
+          ? a.surname > b.surname
+            ? 1
+            : -1
+          : 1
+      );
+
+      this.arrowProfession = 'arrow_upward';
+    }
+    this.professionSorted = !this.professionSorted;
+    this.arrowId = 'sort';
+    this.arrowSurname = 'sort';
+    this.dataSource = [...Crew];
   }
 }

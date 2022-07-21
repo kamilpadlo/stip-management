@@ -28,7 +28,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { UserDetailsComponent } from './main/user-details/user-details.component';
 
 @NgModule({
-  declarations: [AppComponent, MainComponent, HeaderComponent, FooterComponent, UserDetailsComponent],
+  declarations: [
+    AppComponent,
+    MainComponent,
+    HeaderComponent,
+    FooterComponent,
+    UserDetailsComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -47,6 +53,7 @@ import { UserDetailsComponent } from './main/user-details/user-details.component
     MatExpansionModule,
     MatDividerModule,
   ],
+  exports: [MatFormFieldModule, MatInputModule],
   providers: [],
   bootstrap: [AppComponent],
 })

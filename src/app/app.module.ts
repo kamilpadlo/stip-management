@@ -26,6 +26,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { UserDetailsComponent } from './main/user-details/user-details.component';
+import { TestComponent } from './test-component/test/test.component';
+
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,7 @@ import { UserDetailsComponent } from './main/user-details/user-details.component
     HeaderComponent,
     FooterComponent,
     UserDetailsComponent,
+    TestComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +56,7 @@ import { UserDetailsComponent } from './main/user-details/user-details.component
     MatTabsModule,
     MatExpansionModule,
     MatDividerModule,
+    HttpClientModule,
   ],
   exports: [MatFormFieldModule, MatInputModule],
   providers: [],
